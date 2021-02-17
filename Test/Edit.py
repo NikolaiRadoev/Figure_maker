@@ -20,9 +20,11 @@ class Edit(unittest.TestCase):
     def test_edit_rectangle_from_field(self):
         field = Field(9, 9, 'n')
 
-        Figure(field).create_new_rectangle(0, 0, 3, 3, "-")
+        rp = {"height": 4, "width": 6, "symbol": '-'}
+        field.create_figure("Rectangle", 0, 0, rp)
         #  For this test enter 1 and 2, 1, 4, 6, +
-        Figure(field).edit_figure_from_field()
+        input_for_edit = {"height": 4, "width": 6, "symbol": '+'}
+        field.edit_figure(1, 2, 1, input_for_edit)
 
         self.assertEqual(field.get_field(), [['n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'],
                                              ['n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'],
@@ -36,9 +38,11 @@ class Edit(unittest.TestCase):
     def test_edit_triangle_from_field(self):
         field = Field(9, 9, 'n')
 
-        Figure(field).create_new_triangle(0, 0, 3, "+")
+        rp = {"height": 4, "symbol": '+'}
+        field.create_figure("Triangle", 0, 0, rp)
         #  For this test enter 1 and 2, 1, 4, -
-        Figure(field).edit_figure_from_field()
+        input_for_edit = {"height": 4, "symbol": '-'}
+        field.edit_figure(1, 2, 1, input_for_edit)
 
         self.assertEqual(field.get_field(), [['n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'],
                                              ['n', 'n', 'n', 'n', 'n', 'n', 'n', 'n'],
