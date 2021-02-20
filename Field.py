@@ -22,10 +22,7 @@ class Field:
                 print(self.field[(i, j)], end=" ")
 
     def get_field(self):
-        n = [
-            [self.field[(i, j)] for j in range(self.y - 1)]
-            for i in range(self.x - 1)
-        ]
+        n = [[self.field[(i, j)] for j in range(self.y - 1)] for i in range(self.x - 1)]
         return n
 
     def resize_field(self, size_x, size_y):
@@ -57,11 +54,28 @@ class Field:
 
     def create_figure(self, name_of_choice_figure, start_coord_x, start_coord_y, rp):
         if name_of_choice_figure == "Triangle":
-            self.create_triangle(start_coord_x, start_coord_y, rp["height"], rp["symbol"])
-            self.add_triangle_to_list(name_of_choice_figure, start_coord_x, start_coord_y, rp["height"], rp["symbol"])
+            self.create_triangle(
+                start_coord_x, start_coord_y, rp["height"], rp["symbol"]
+            )
+            self.add_triangle_to_list(
+                name_of_choice_figure,
+                start_coord_x,
+                start_coord_y,
+                rp["height"],
+                rp["symbol"],
+            )
         elif name_of_choice_figure == "Rectangle":
-            self.create_rectangle(start_coord_x, start_coord_y, rp["height"], rp["width"], rp["symbol"])
-            self.add_rectangle_to_list(name_of_choice_figure, start_coord_x, start_coord_y, rp["height"], rp["width"], rp["symbol"])
+            self.create_rectangle(
+                start_coord_x, start_coord_y, rp["height"], rp["width"], rp["symbol"]
+            )
+            self.add_rectangle_to_list(
+                name_of_choice_figure,
+                start_coord_x,
+                start_coord_y,
+                rp["height"],
+                rp["width"],
+                rp["symbol"],
+            )
         else:
             print("I don't know how to draw this figure")
 
@@ -71,26 +85,48 @@ class Field:
                 if self.get_symbol(start_coord_x + i, start_coord_y + j) == self.char:
                     self.set_cell_symbol(start_coord_x + i, start_coord_y + j, symbol)
                 else:
-                    self.set_cell_symbol(start_coord_x + i, start_coord_y + j,
-                                         self.get_symbol(start_coord_x + i, start_coord_y + j) + symbol)
+                    self.set_cell_symbol(
+                        start_coord_x + i,
+                        start_coord_y + j,
+                        self.get_symbol(start_coord_x + i, start_coord_y + j) + symbol,
+                    )
 
     def create_rectangle(self, start_coord_x, start_coord_y, height, width, symbol):
         for i in range(height):
             for j in range(width):
                 if self.get_symbol(start_coord_x + i, start_coord_y + j) == self.char:
-                    self.set_cell_symbol(start_coord_x + i, start_coord_y + j,
-                                         symbol)
+                    self.set_cell_symbol(start_coord_x + i, start_coord_y + j, symbol)
                 else:
-                    self.set_cell_symbol(start_coord_x + i, start_coord_y + j,
-                                         self.get_symbol(start_coord_x + i, start_coord_y + j) + symbol)
+                    self.set_cell_symbol(
+                        start_coord_x + i,
+                        start_coord_y + j,
+                        self.get_symbol(start_coord_x + i, start_coord_y + j) + symbol,
+                    )
 
-    def add_rectangle_to_list(self, name_of_choice_figure, start_coord_x, start_coord_y, height, width, symbol):
+    def add_rectangle_to_list(
+        self, name_of_choice_figure, start_coord_x, start_coord_y, height, width, symbol
+    ):
         self.counter += 1
-        self.all_figures[self.counter] = [name_of_choice_figure, start_coord_x, start_coord_y, height, width, symbol]
+        self.all_figures[self.counter] = [
+            name_of_choice_figure,
+            start_coord_x,
+            start_coord_y,
+            height,
+            width,
+            symbol,
+        ]
 
-    def add_triangle_to_list(self, name_of_choice_figure, start_coord_x, start_coord_y, height, symbol):
+    def add_triangle_to_list(
+        self, name_of_choice_figure, start_coord_x, start_coord_y, height, symbol
+    ):
         self.counter += 1
-        self.all_figures[self.counter] = [name_of_choice_figure, start_coord_x, start_coord_y, height, symbol]
+        self.all_figures[self.counter] = [
+            name_of_choice_figure,
+            start_coord_x,
+            start_coord_y,
+            height,
+            symbol,
+        ]
 
     def delete_figure_from_field(self, num_of_delete):
         if 0 < num_of_delete <= self.counter:
@@ -102,11 +138,11 @@ class Field:
 
     def remove_figure(self, choice):
         element = self.all_figures.get(choice)
-        if element[0] == 'Rectangle':
+        if element[0] == "Rectangle":
             for i in range(element[3]):
                 for j in range(element[4]):
                     self.set_cell_symbol(element[1] + i, element[2] + j, self.char)
-        elif element[0] == 'Triangle':
+        elif element[0] == "Triangle":
             for i in range(element[3]):
                 for j in range(i + 1):
                     self.set_cell_symbol(element[1] + i, element[2] + j, self.char)
@@ -116,7 +152,9 @@ class Field:
     def remove_figure_from_list(self, choice):
         self.all_figures.pop(choice)
 
-    def edit_figure_from_field(self, num_of_edit, start_coord_x, start_coord_y, input_for_edit):
+    def edit_figure_from_field(
+        self, num_of_edit, start_coord_x, start_coord_y, input_for_edit
+    ):
         if 0 < num_of_edit <= self.counter:
             self.edit_figure(num_of_edit, start_coord_x, start_coord_y, input_for_edit)
             self.show_list_with_all_figures()
@@ -126,7 +164,7 @@ class Field:
     def edit_figure(self, choice, start_coord_x, start_coord_y, input_for_edit):
         self.remove_figure(choice)
         element = self.all_figures.get(choice)
-        if element[0] == 'Rectangle':
+        if element[0] == "Rectangle":
             element[1] = start_coord_x
             element[2] = start_coord_y
             element[3] = input_for_edit["height"]
@@ -136,7 +174,7 @@ class Field:
             for i in range(element[3]):
                 for j in range(element[4]):
                     self.set_cell_symbol(element[1] + i, element[2] + j, element[5])
-        elif element[0] == 'Triangle':
+        elif element[0] == "Triangle":
             element[1] = start_coord_x
             element[2] = start_coord_y
             element[3] = input_for_edit["height"]

@@ -5,25 +5,15 @@ class Figure(object):
     def required_fields(self, name_of_figure):
         if name_of_figure == "Triangle":
 
-            return [
-                ("height", int),
-                ("symbol", str)
-            ]
+            return [("height", int), ("symbol", str)]
 
         elif name_of_figure == "Rectangle":
 
-            return [
-                ("height", int),
-                ("width", int),
-                ("symbol", str)
-            ]
+            return [("height", int), ("width", int), ("symbol", str)]
 
         elif name_of_figure == "Circle":
 
-            return [
-                ("radios", int),
-                ("symbol", str)
-            ]
+            return [("radios", int), ("symbol", str)]
 
         else:
             return Exception("Wrong: Can't find this figure")
