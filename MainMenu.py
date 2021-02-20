@@ -13,7 +13,10 @@ class MainMenu(object):
             if choice <= 0:
                 print("Have a nice day ;D")
                 break
-            self.redirect(choice)
+            try:
+                self.redirect(choice)
+            except ValueError as e:
+                print("An error occured: %s" % e)
 
     def display_menu(self):
         print("FIGURE-MAKER")
@@ -27,64 +30,81 @@ class MainMenu(object):
         print("7:Automation set")
         print("0:End")
 
+    def show_field_figures(self):
+        if not self.field.all_figures:
+            print("Field is empty")
+        else:
+            print(self.field.all_figures)
+
     def redirect(self, choice):
         if choice == 1:
             print("Current size x/y: %s" % self.field.x, self.field.y)
             new_start_coord_x = int(input("Enter new x coord: "))
             new_start_coord_y = int(input("Enter new y coord: "))
             self.field.resize_field(new_start_coord_x, new_start_coord_y)
-            print('\n')
+            print("\n")
 
         elif choice == 2:
-            name_of_choice_figure = input("What you want to draw: ")
-            if not Figure().list_with_figures.__contains__(name_of_choice_figure):
-                print("can't find this figure")
-            else:
-                start_coord_x = int(input("Enter x coord of %s: " % name_of_choice_figure))
-                start_coord_y = int(input("Enter y coord of %s: " % name_of_choice_figure))
-                rp = self.collect_figure_input(name_of_choice_figure)
-                self.field.create_figure(name_of_choice_figure, start_coord_x, start_coord_y, rp)
+            figure_name = input("What you want to draw: ")
+            if figure_name not in Figure.get_figure_map():
+                raise ValueError(
+                    "Can't find this figure. Possible options are: %s"
+                    % Figure.get_figure_map().keys()
+                )
+            x = int(input("Enter x coord of %s: " % figure_name))
+            y = int(input("Enter y coord of %s: " % figure_name))
+            rp = self.collect_figure_input(figure_name)
+            self.field.create_figure(figure_name, x, y, rp)
 
         elif choice == 3:
-            self.field.show_list_with_all_figures()
-            print('\n')
+            self.show_field_figures()
+            print("\n")
 
         elif choice == 4:
             if len(self.field.all_figures) == 0:
                 print("There are NO items to DELETE in the list")
             else:
-                self.field.show_list_with_all_figures()
+                self.show_field_figures()
                 num_of_delete = int(input("Enter num of figure to delete: "))
-                self.field.delete_figure_from_field(num_of_delete)
-                print('\n')
+                self.field.delete_figure(num_of_delete)
+                print("\n")
 
         elif choice == 5:
             if len(self.field.all_figures) == 0:
                 print("There are NO items to EDIT in the list")
             else:
-                self.field.show_list_with_all_figures()
+                self.show_field_figures()
                 num_of_edit = int(input("Enter num of figure to edit: "))
-                name = self.field.name_of_figure_from_list(num_of_edit)
-                start_coord_x = int(input("Enter x coord: "))
-                start_coord_y = int(input("Enter y coord: "))
+
+                if not self.field.has_figure(num_of_edit):
+                    print("Invalid number")
+                    return
+
+                figure = self.field.get_figure(num_of_edit)
+                name = figure.name
+                x = int(input("Enter x coord: "))
+                y = int(input("Enter y coord: "))
                 input_for_edit = self.collect_figure_input(name)
-                self.field.edit_figure_from_field(num_of_edit, start_coord_x, start_coord_y, input_for_edit)
-                print('\n')
+                self.field.edit_figure(num_of_edit, x, y, input_for_edit)
+                print("\n")
 
         elif choice == 6:
             self.field.print_field()
-            print('\n')
+            print("\n")
 
         elif choice == 7:
             self.field.auto_set()
-            print('\n')
+            self.field.print_field()
+            print("\n")
 
         else:
             print("Invalid Number")
-            print('\n')
+            print("\n")
 
     def collect_figure_input(self, name_of_figure):
-        return{
-            field_name: field_type(input("Enter %s of %s: " % (field_name, name_of_figure)))
-            for field_name, field_type in Figure().required_fields(name_of_figure)
+        return {
+            field_name: field_type(
+                input("Enter %s of %s: " % (field_name, name_of_figure))
+            )
+            for field_name, field_type in Figure.get_required_fields(name_of_figure)
         }
