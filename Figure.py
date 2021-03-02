@@ -70,6 +70,20 @@ class Triangle(Figure):
         # 1 1 0
         # 1 1 1
         if self.is_inside(
+                x1=self.height - 1,
+                y1=0,
+                x2=0,
+                y2=0,
+                x3=self.height - 1,
+                y3=self.height - 1,
+                x=x,
+                y=y,
+        ):
+            return self.symbol
+        # 1 1 1
+        # 0 1 1
+        # 0 0 1
+        """if self.is_inside(
             x1=0,
             y1=0,
             x2=0,
@@ -79,7 +93,7 @@ class Triangle(Figure):
             x=x,
             y=y,
         ):
-            return self.symbol
+            return self.symbol"""
 
 
 class Rectangle(Figure):
